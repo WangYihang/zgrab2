@@ -5,6 +5,7 @@ go 1.12
 require (
 	github.com/RumbleDiscovery/jarm-go v0.0.6 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.0.0
 	github.com/prometheus/client_golang v1.10.0
 	github.com/prometheus/common v0.20.0 // indirect
 	github.com/sirupsen/logrus v1.8.1

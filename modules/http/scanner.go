@@ -22,6 +22,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zcrypto/tls"
 	"github.com/zmap/zgrab2"
@@ -472,7 +473,6 @@ func (scanner *Scanner) newHTTPScan(t *zgrab2.ScanTarget, useHTTPS bool) *scan {
 		port = uint16(scanner.config.BaseFlags.Port)
 	}
 	ret.url = getHTTPURL(useHTTPS, host, port, scanner.config.Endpoint)
-
 	return &ret
 }
 
@@ -496,6 +496,8 @@ func (scan *scan) Grab() *zgrab2.ScanError {
 		// to set the Accept header
 		request.Header.Set("Accept", "*/*")
 	}
+
+	request.Header.Set("NISL", uuid.New().String())
 
 	resp, err := scan.client.Do(request)
 	if resp != nil && resp.Body != nil {
