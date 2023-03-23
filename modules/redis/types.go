@@ -8,7 +8,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/zmap/zgrab2"
+	"github.com/WangYihang/zgrab2"
 )
 
 var (

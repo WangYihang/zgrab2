@@ -1,7 +1,7 @@
 package smtp
 
 import (
-	"github.com/zmap/zgrab2"
+	"github.com/WangYihang/zgrab2"
 	"testing"
 )
 

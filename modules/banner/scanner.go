@@ -4,6 +4,7 @@
 package banner
 
 import (
+	"encoding/hex"
 	"errors"
 	"fmt"
 	"io"
@@ -12,9 +13,8 @@ import (
 	"net"
 	"regexp"
 	"strconv"
-	"encoding/hex"
 
-	"github.com/zmap/zgrab2"
+	"github.com/WangYihang/zgrab2"
 )
 
 // Flags give the command-line flags for the banner module.

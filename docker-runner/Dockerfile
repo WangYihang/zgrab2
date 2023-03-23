@@ -6,9 +6,9 @@ WORKDIR /go/src/github.com/zmap
 ADD . zgrab2
 
 # This would instead grab it from the source repo
-# RUN go-wrapper download github.com/zmap/zgrab2
+# RUN go-wrapper download github.com/WangYihang/zgrab2
 
-WORKDIR /go/src/github.com/zmap/zgrab2
+WORKDIR /go/src/github.com/WangYihang/zgrab2
 
 RUN go get -f -u -v .
 RUN go get -f -u -v -t .
@@ -22,4 +22,4 @@ RUN chmod a+x ./docker-runner/entrypoint.sh
 RUN make container-clean
 
 CMD []
-ENTRYPOINT ["/go/src/github.com/zmap/zgrab2/docker-runner/entrypoint.sh"]
+ENTRYPOINT ["/go/src/github.com/WangYihang/zgrab2/docker-runner/entrypoint.sh"]

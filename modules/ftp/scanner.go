@@ -16,8 +16,8 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/WangYihang/zgrab2"
 	log "github.com/sirupsen/logrus"
-	"github.com/zmap/zgrab2"
 )
 
 // ScanResults is the output of the scan.
@@ -239,13 +239,13 @@ func (ftp *Connection) GetFTPSCertificates() error {
 }
 
 // Scan performs the configured scan on the FTP server, as follows:
-// * Read the banner into results.Banner (if it is not a 2XX response, bail)
-// * If the FTPAuthTLS flag is not set, finish.
-// * Send the AUTH TLS command to the server. If the response is not 2XX, then
-//   send the AUTH SSL command. If the response is not 2XX, then finish.
-// * Perform ths TLS handshake / any configured TLS scans, populating
-//   results.TLSLog.
-// * Return SCAN_SUCCESS, &results, nil
+//   - Read the banner into results.Banner (if it is not a 2XX response, bail)
+//   - If the FTPAuthTLS flag is not set, finish.
+//   - Send the AUTH TLS command to the server. If the response is not 2XX, then
+//     send the AUTH SSL command. If the response is not 2XX, then finish.
+//   - Perform ths TLS handshake / any configured TLS scans, populating
+//     results.TLSLog.
+//   - Return SCAN_SUCCESS, &results, nil
 func (s *Scanner) Scan(t zgrab2.ScanTarget) (status zgrab2.ScanStatus, result interface{}, thrown error) {
 	var err error
 	conn, err := t.Open(&s.config.BaseFlags)

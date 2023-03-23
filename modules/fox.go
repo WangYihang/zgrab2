@@ -1,6 +1,6 @@
 package modules
 
-import "github.com/zmap/zgrab2/modules/fox"
+import "github.com/WangYihang/zgrab2/modules/fox"
 
 func init() {
 	fox.RegisterModule()

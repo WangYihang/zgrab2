@@ -7,9 +7,9 @@ package mysql
 import (
 	"reflect"
 
+	"github.com/WangYihang/zgrab2"
+	"github.com/WangYihang/zgrab2/lib/mysql"
 	log "github.com/sirupsen/logrus"
-	"github.com/zmap/zgrab2"
-	"github.com/zmap/zgrab2/lib/mysql"
 )
 
 // ScanResults contains detailed information about the scan.
@@ -211,10 +211,10 @@ func (scanner *Scanner) GetTrigger() string {
 }
 
 // Scan probles the target for a MySQL server.
-// 1. Connects and waits to receive the handshake packet.
-// 2. If the server supports SSL, send an SSLRequest packet, then
-//    perform the standard TLS actions.
-// 3. Process and return the results.
+//  1. Connects and waits to receive the handshake packet.
+//  2. If the server supports SSL, send an SSLRequest packet, then
+//     perform the standard TLS actions.
+//  3. Process and return the results.
 func (s *Scanner) Scan(t zgrab2.ScanTarget) (status zgrab2.ScanStatus, result interface{}, thrown error) {
 	var tlsConn *zgrab2.TLSConnection
 	sql := mysql.NewConnection(&mysql.Config{})

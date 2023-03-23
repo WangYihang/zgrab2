@@ -22,11 +22,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/WangYihang/zgrab2"
+	"github.com/WangYihang/zgrab2/lib/http"
 	"github.com/google/uuid"
 	log "github.com/sirupsen/logrus"
 	"github.com/zmap/zcrypto/tls"
-	"github.com/zmap/zgrab2"
-	"github.com/zmap/zgrab2/lib/http"
 	"golang.org/x/net/html/charset"
 )
 
@@ -496,8 +496,9 @@ func (scan *scan) Grab() *zgrab2.ScanError {
 		// to set the Accept header
 		request.Header.Set("Accept", "*/*")
 	}
-
-	request.Header.Set("NISL", uuid.New().String())
+	request.Header.Set("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.132 Safari/537.36")
+	request.Header.Set("NISL-Challenge", uuid.New().String())
+	request.Header.Set("NISL-Abuse-Report", "This is a probing HTTP request from [Network & Information Security Lab (NISL)](https://netsec.ccert.edu.cn/) of Tsinghua University, we are conducting several academic researchs on Internet Measurement using these HTTP requests and responses. If you DO NOT want your networks be probed, please contact us via https://netsec.ccert.edu.cn/contact/")
 
 	resp, err := scan.client.Do(request)
 	if resp != nil && resp.Body != nil {
