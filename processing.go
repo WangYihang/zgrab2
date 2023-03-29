@@ -19,6 +19,7 @@ type Grab struct {
 
 // ScanTarget is the host that will be scanned
 type ScanTarget struct {
+	Index  int
 	IP     net.IP
 	Domain string
 	Tag    string
