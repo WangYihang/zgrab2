@@ -29,3 +29,6 @@ dist/*
 # Data
 *.txt
 *.csv
+
+# Commit hash
+.commit
