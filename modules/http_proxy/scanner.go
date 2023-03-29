@@ -3,16 +3,18 @@ package http_proxy
 import (
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/WangYihang/zgrab2"
 	"github.com/google/uuid"
+	log "github.com/sirupsen/logrus"
 )
 
 type Flags struct {
 	zgrab2.BaseFlags
+	TargetHost string `long:"target-host" description:"Target host to connect to" default:"ifconfig.me"`
+	TargetPort uint16 `long:"target-port" description:"Target port to connect to" default:"80"`
 }
 
 // Validate performs any needed validation on the arguments
@@ -44,12 +46,13 @@ func (module *Module) Description() string {
 
 // Scanner is the implementation of the zgrab2.Scanner interface.
 type Scanner struct {
-	config *Flags
+	Config *Flags
+	Domain string
 }
 
 func (s *Scanner) Init(flags zgrab2.ScanFlags) error {
-	fl, _ := flags.(*Flags)
-	s.config = fl
+	flag, _ := flags.(*Flags)
+	s.Config = flag
 	return nil
 }
 
@@ -58,11 +61,11 @@ func (s *Scanner) InitPerSender(senderID int) error {
 }
 
 func (s *Scanner) GetName() string {
-	return s.config.Name
+	return s.Config.Name
 }
 
 func (s *Scanner) GetTrigger() string {
-	return s.config.Trigger
+	return s.Config.Trigger
 }
 
 func (s *Scanner) Protocol() string {
@@ -73,21 +76,25 @@ type Result struct {
 	Response *http.Response `json:"response,omitempty"`
 }
 
-func CheckTransparentHTTPProxy(host string, port uint16, domain string) error {
+func CheckTransparentHTTPProxy(index int, host string, port uint16, targetHost string, targetPort uint16) error {
+	if index%64 == 0 {
+		log.Infof("%d, %s:%d, http://%s:%d/", index, host, port, targetHost, targetPort)
+	}
+
 	// create a new HTTP client
 	client := &http.Client{
-		Timeout: 16 * time.Second,
+		Timeout: 60 * time.Second,
 	}
 
 	// create a new HTTP request
 	request, err := http.NewRequest("GET", fmt.Sprintf("http://%s:%d/", host, port), nil)
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return err
 	}
 
 	// add headers to the request, if needed
-	request.Host = domain
+	request.Host = fmt.Sprintf("%s:%d", targetHost, targetPort)
 
 	request.Header.Add("User-Agent", "curl/7.81.0")
 	request.Header.Add("NISL-Challenge", uuid.New().String())
@@ -99,7 +106,7 @@ func CheckTransparentHTTPProxy(host string, port uint16, domain string) error {
 	// send the request using the client
 	resp, err := client.Do(request)
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return err
 	}
 	defer resp.Body.Close()
@@ -107,7 +114,7 @@ func CheckTransparentHTTPProxy(host string, port uint16, domain string) error {
 	// read the response body
 	rawBody, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
+		// fmt.Println(err)
 		return err
 	}
 
@@ -121,9 +128,15 @@ func CheckTransparentHTTPProxy(host string, port uint16, domain string) error {
 }
 
 func (s *Scanner) Scan(t zgrab2.ScanTarget) (zgrab2.ScanStatus, interface{}, error) {
-	err := CheckTransparentHTTPProxy(t.IP.String(), uint16(t.Port), t.Domain)
+	var port uint16
+	if t.Port == -1 {
+		port = uint16(s.Config.Port)
+	} else {
+		port = uint16(t.Port)
+	}
+	err := CheckTransparentHTTPProxy(t.Index, t.IP.String(), port, s.Config.TargetHost, s.Config.TargetPort)
 	if err != nil {
-		return zgrab2.SCAN_PROTOCOL_ERROR, nil, nil
+		return zgrab2.SCAN_PROTOCOL_ERROR, err.Error(), nil
 	}
 	result := map[string]string{
 		"data": "success",

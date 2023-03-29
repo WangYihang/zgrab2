@@ -42,11 +42,9 @@ func ParseCSVTarget(fields []string) (ipnet *net.IPNet, port int, domain string,
 			return
 		}
 	}
+	port = -1
 	if len(fields) > 1 {
 		port, err = strconv.Atoi(fields[1])
-		if err != nil {
-			port = -1
-		}
 	}
 	if len(fields) > 2 {
 		domain = fields[2]
