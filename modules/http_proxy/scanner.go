@@ -147,6 +147,10 @@ func (s *Scanner) Scan(t zgrab2.ScanTarget) (zgrab2.ScanStatus, interface{}, err
 func RegisterModule() {
 	var module Module
 
+	log.SetFormatter(&log.TextFormatter{
+		FullTimestamp: true,
+	})
+
 	_, err := zgrab2.AddCommand("http_proxy", "HTTP Proxy Verifier", module.Description(), 80, &module)
 	if err != nil {
 		log.Fatal(err)
