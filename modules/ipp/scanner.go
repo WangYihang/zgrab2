@@ -692,8 +692,8 @@ func (scanner *Scanner) newIPPScan(target *zgrab2.ScanTarget, tls bool) *scan {
 	}
 	// Scanner Target port overrides config flag port
 	var port uint16
-	if target.Port != nil {
-		port = uint16(*target.Port)
+	if target.Port != -1 {
+		port = uint16(target.Port)
 	} else {
 		port = uint16(scanner.config.BaseFlags.Port)
 	}

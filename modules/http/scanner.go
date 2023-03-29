@@ -467,8 +467,8 @@ func (scanner *Scanner) newHTTPScan(t *zgrab2.ScanTarget, useHTTPS bool) *scan {
 	}
 	// Scanner Target port overrides config flag port
 	var port uint16
-	if t.Port != nil {
-		port = uint16(*t.Port)
+	if t.Port != -1 {
+		port = uint16(t.Port)
 	} else {
 		port = uint16(scanner.config.BaseFlags.Port)
 	}

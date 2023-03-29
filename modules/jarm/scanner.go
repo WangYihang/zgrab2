@@ -4,12 +4,13 @@ package jarm
 
 import (
 	_ "fmt"
-	jarm "github.com/RumbleDiscovery/jarm-go"
-	"github.com/WangYihang/zgrab2"
 	"log"
 	"net"
 	"strings"
 	"time"
+
+	jarm "github.com/RumbleDiscovery/jarm-go"
+	"github.com/WangYihang/zgrab2"
 )
 
 // Flags give the command-line flags for the banner module.
@@ -57,7 +58,7 @@ func (scanner *Scanner) GetName() string {
 }
 
 // GetPort returns the port being scanned.
-func (scanner *Scanner) GetPort() uint {
+func (scanner *Scanner) GetPort() int {
 	return scanner.config.Port
 }
 

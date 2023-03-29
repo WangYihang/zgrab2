@@ -87,10 +87,10 @@ func (s *SSHScanner) Scan(t zgrab2.ScanTarget) (zgrab2.ScanStatus, interface{}, 
 
 	var port uint
 	// If the port is supplied in ScanTarget, let that override the cmdline option
-	if t.Port != nil {
-		port = *t.Port
+	if t.Port != -1 {
+		port = uint(t.Port)
 	} else {
-		port = s.config.Port
+		port = uint(s.config.Port)
 	}
 	portStr := strconv.FormatUint(uint64(port), 10)
 	rhost := net.JoinHostPort(t.Host(), portStr)
